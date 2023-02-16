@@ -10,4 +10,4 @@ export type Notice = {
   created_at: string;
   content: string;
   user_ui: string | undefined;
-}
+};
