@@ -1,16 +1,16 @@
 /**
- * Supabase のデータを使って SSG でデータを組み込んだページを作る
+ * Supabase のデータを使って SSR でデータを組み込んだページを作る
  */
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { NextPage, GetStaticProps } from 'next';
+import { NextPage, GetServerSideProps } from 'next';
 
 import { Layout } from '@/components/Layout';
 import { supabase } from '@/utils/supabase';
 import { Task, Notice } from '@/types/types';
 
-export const getStaticProps: GetStaticProps = async () => {
-  console.log('getStaticProps/ssg invoked');
+export const getServerSideProps: GetServerSideProps = async () => {
+  console.log('getServerSideProps/ssr invoked');
   const { data: tasks } = await supabase
     .from('todos')
     .select('*')
@@ -27,11 +27,11 @@ type StaticProps = {
   notices: Notice[];
 };
 
-const Ssg: NextPage<StaticProps> = ({ tasks, notices }) => {
+const Ssr: NextPage<StaticProps> = ({ tasks, notices }) => {
   const router = useRouter();
   return (
     <Layout title="SSG">
-      <p className="mb-3 text-blue-500">SSG</p>
+      <p className="mb-3 text-blue-500">SSR</p>
       <ul className="mb-3">
         {tasks.map((task) => {
           return (
@@ -50,17 +50,17 @@ const Ssg: NextPage<StaticProps> = ({ tasks, notices }) => {
           );
         })}
       </ul>
-      <Link href="/ssr" prefetch={false}>
-        <span className="mb-3 text-xs">Link to ssr</span>
+      <Link href="/ssg" prefetch={false}>
+        <span className="mb-3 text-xs">Link to ssg</span>
       </Link>
       <Link href="/isr" prefetch={false}>
         <span className="mb-3 text-xs">Link to isr</span>
       </Link>
-      <button className="mb-3 text-xs" onClick={() => router.push('/ssr')}>
-        Route to ssr
+      <button className="mb-3 text-xs" onClick={() => router.push('/ssg')}>
+        Route to ssg
       </button>
     </Layout>
   );
 };
 
-export default Ssg;
+export default Ssr;
