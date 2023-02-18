@@ -10,7 +10,10 @@ export const useMutateNotice = () => {
   // お知らせを作成する
   const createNoticeMutation = useMutation(
     async (notice: Omit<Notice, 'id' | 'created_at'>) => {
-      const { data, error } = await supabase.from('notices').insert(notice);
+      const { data, error } = await supabase
+        .from('notices')
+        .insert(notice)
+        .select();
       if (error) throw new Error(error.message);
       return data;
     },
@@ -39,7 +42,8 @@ export const useMutateNotice = () => {
       const { data, error } = await supabase
         .from('notices')
         .update({ title: notice.content })
-        .eq('id', notice.id);
+        .eq('id', notice.id)
+        .select();
       if (error) throw new Error(error.message);
       return data;
     },
@@ -51,12 +55,10 @@ export const useMutateNotice = () => {
       onSuccess: (res, variables) => {
         const previousTodos = queryClient.getQueryData<Notice[]>('notices');
         if (previousTodos && res != null) {
-          queryClient.setQueryData(
-            'notices',
-            previousTodos.map((notice) => {
-              notice.id === variables.id ? res[0] : notice;
-            })
+          const newNotices = previousTodos.map((notice) =>
+            notice.id === variables.id ? res[0] : notice
           );
+          queryClient.setQueryData('notices', newNotices);
         }
         reset();
       },

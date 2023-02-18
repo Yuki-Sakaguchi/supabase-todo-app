@@ -10,7 +10,10 @@ export const useMutateTask = () => {
   // タスクを作成する
   const createTaskMutation = useMutation(
     async (task: Omit<Task, 'id' | 'created_at'>) => {
-      const { data, error } = await supabase.from('todos').insert(task);
+      const { data, error } = await supabase
+        .from('todos')
+        .insert(task)
+        .select();
       if (error) throw new Error(error.message);
       return data;
     },
@@ -39,8 +42,10 @@ export const useMutateTask = () => {
       const { data, error } = await supabase
         .from('todos')
         .update({ title: task.title })
-        .eq('id', task.id);
+        .eq('id', task.id)
+        .select();
       if (error) throw new Error(error.message);
+      console.log(data);
       return data;
     },
     {
@@ -51,12 +56,10 @@ export const useMutateTask = () => {
       onSuccess: (res, variables) => {
         const previousTodos = queryClient.getQueryData<Task[]>('todos');
         if (previousTodos && res != null) {
-          queryClient.setQueryData(
-            'todos',
-            previousTodos.map((task) => {
-              task.id === variables.id ? res[0] : task;
-            })
+          const newTodos = previousTodos.map((task) =>
+            task.id === variables.id ? res[0] : task
           );
+          queryClient.setQueryData('todos', newTodos);
         }
         reset();
       },
