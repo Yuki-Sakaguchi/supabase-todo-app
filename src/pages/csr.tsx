@@ -37,7 +37,7 @@ const Csr: NextPage = () => {
 
   return (
     <Layout title="CSR">
-      <p className="mb-3 text-blue-500">SSR + CSF</p>
+      <p className="mb-3 text-blue-500">SSG + CSF</p>
       <ul className="mb-3">
         {tasks.map((task) => {
           return (
