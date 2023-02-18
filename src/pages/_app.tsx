@@ -47,7 +47,8 @@ function App({ Component, pageProps }: AppProps) {
 
   // ログインしていなかったらトップに飛ばす処理
   const validateSession = async () => {
-    const user = supabase.auth.user();
+    const res = await supabase.auth.getUser();
+    const { user } = res.data;
     if (user && pathname === '/') {
       push('/dashboard');
     } else if (!user && pathname !== '/') {

@@ -13,6 +13,7 @@ export const useMutateAuth = () => {
 
   const loginMutaion = useMutation(
     async () => {
+      console.log(email, password);
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -29,6 +30,7 @@ export const useMutateAuth = () => {
 
   const registerMutaion = useMutation(
     async () => {
+      console.log(email, password);
       const { error } = await supabase.auth.signUp({
         email,
         password,
