@@ -11,6 +11,8 @@ import { supabase } from '@/utils/supabase';
 import { Layout } from '@/components/Layout';
 import { TaskList } from '@/components/TaskList';
 import { TaskForm } from '@/components/TaskForm';
+import { NoticeList } from '@/components/NoticeList';
+import { NoticeForm } from '@/components/NoticeForm';
 
 const Dashboard: NextPage = () => {
   const signOut = () => {
@@ -29,6 +31,13 @@ const Dashboard: NextPage = () => {
           </div>
           <TaskForm />
           <TaskList />
+        </div>
+        <div>
+          <div className="my-3 flex justify-center">
+            <BellIcon className="h-8 w-8 text-blue-500" />
+          </div>
+          <NoticeForm />
+          <NoticeList />
         </div>
       </div>
     </Layout>
